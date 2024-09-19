@@ -171,7 +171,7 @@ const MapComponent = () => {
             <div
                 className={`absolute top-0 left-0 z-10 ${
                     isCardVisible ? 'block' : 'hidden md:block'
-                } w-full md:w-[300px] h-full`}
+                } w-full md:w-[400px] h-full`}
             >
                 <Card
                     title="Фильтр"
@@ -193,25 +193,27 @@ const MapComponent = () => {
                                 ))}
                             </Checkbox.Group>
                         </Panel>
+                        <Panel header="Кадастровый поиск" key="2">
+                            <div className="mt-4 flex gap-5">
+                                <Input
+                                    placeholder="Введите кадастровый номер"
+                                    value={cadastralNumber}
+                                    onChange={(e) => setCadastralNumber(e.target.value)}
+                                    onPressEnter={searchByCadastralNumber}
+                                    suffix={<SearchOutlined/>}
+                                />
+                                <Button
+                                    type="primary"
+                                    onClick={searchByCadastralNumber}
+                                    className="mt-2"
+                                >
+                                    Найти
+                                </Button>
+                            </div>
+                        </Panel>
                     </Collapse>
 
-                    {/* Search by Cadastral Number */}
-                    <div className="mt-4 flex gap-5">
-                        <Input
-                            placeholder="Введите кадастровый номер"
-                            value={cadastralNumber}
-                            onChange={(e) => setCadastralNumber(e.target.value)}
-                            onPressEnter={searchByCadastralNumber}
-                            suffix={<SearchOutlined/>}
-                        />
-                        <Button
-                            type="primary"
-                            onClick={searchByCadastralNumber}
-                            className="mt-2"
-                        >
-                            Найти
-                        </Button>
-                    </div>
+
                 </Card>
             </div>
 
