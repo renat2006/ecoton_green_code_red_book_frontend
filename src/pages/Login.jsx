@@ -58,7 +58,7 @@ const LoginPage = () => {
             // Сохраняем данные пользователя и токен в контекст и localStorage
             login(user, tokens.token);
             setApiResponse(tokens);
-            setIsModalVisible(true);
+
         } catch (error) {
             console.error('Error:', error);
         }
