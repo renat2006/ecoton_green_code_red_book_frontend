@@ -10,7 +10,7 @@ const LoginPage = () => {
 
 
     return (
-        <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/map_back.png')" }}>
+        <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/map_back.webp')" }}>
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
