@@ -52,7 +52,7 @@ const LoginPage = () => {
                     first_name: user.first_name,
                     last_name: user.last_name || "",
                     username: user.username || "",
-                    photo_url: user.photo_url || "",
+                    photo_url: null,
                     auth_date: parseInt(user.auth_date, 10),
                     hash: user.hash
                 }),
@@ -63,6 +63,7 @@ const LoginPage = () => {
             }
 
             const tokens = await response.json();
+            console.log(tokens)
             setApiResponse(tokens);
             setIsModalVisible(true);
         } catch (error) {
