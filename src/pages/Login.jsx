@@ -8,6 +8,7 @@ const LoginPage = () => {
         window.location.href = `https://oauth.telegram.org/auth?bot_id=${telegramBotId}&origin=${window.location.origin}&embed=1&request_access=write`;
     };
 
+
     return (
         <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/map_back.png')" }}>
             {/* Overlay */}
