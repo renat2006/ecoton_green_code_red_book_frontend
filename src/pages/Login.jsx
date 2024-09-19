@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FaTelegramPlane } from 'react-icons/fa';
+import React, {useEffect, useState} from 'react';
+import {FaTelegramPlane} from 'react-icons/fa';
 import {us} from "@mapbox/mapbox-gl-geocoder/lib/exceptions.js";
 
 const LoginPage = () => {
@@ -37,8 +37,9 @@ const LoginPage = () => {
                     first_name: user.first_name,
                     last_name: user.last_name,
                     username: user.username,
-                    photo_url: user.photo_url,
+                    photo_url: user?.photo_url && user?.photo_url ? user.photo_url : "",
                     auth_date: user.auth_date,
+                    hash: user.hash
                 }),
             });
 
