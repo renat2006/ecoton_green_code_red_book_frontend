@@ -62,7 +62,7 @@ const LoginPage = () => {
             login(user, tokens.token);
             console.log(user, tokens)
             setApiResponse(tokens);
-
+            navigate("/")
 
 
         } catch (error) {
