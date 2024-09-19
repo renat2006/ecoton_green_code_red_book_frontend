@@ -74,21 +74,24 @@ const MapComponent = () => {
             if (!response.ok) throw new Error('Failed to fetch cadastral data');
 
             const data = await response.json();
-            console.log(data)
             const feature = data.feature;
 
             if (feature && feature.extent) {
+                // Convert the coordinates from EPSG:3857 to WGS84
+                const [xmin, ymin] = convertEPSG3857ToWGS84(feature.extent.xmin, feature.extent.ymin);
+                const [xmax, ymax] = convertEPSG3857ToWGS84(feature.extent.xmax, feature.extent.ymax);
+
                 // Create a GeoJSON feature for the found object
                 const geoJsonFeature = {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
                         coordinates: [[
-                            [feature.extent.xmin, feature.extent.ymin],
-                            [feature.extent.xmin, feature.extent.ymax],
-                            [feature.extent.xmax, feature.extent.ymax],
-                            [feature.extent.xmax, feature.extent.ymin],
-                            [feature.extent.xmin, feature.extent.ymin],
+                            [xmin, ymin],
+                            [xmin, ymax],
+                            [xmax, ymax],
+                            [xmax, ymin],
+                            [xmin, ymin],
                         ]]
                     },
                     properties: {
@@ -121,8 +124,8 @@ const MapComponent = () => {
 
                 // Center the map on the found feature
                 mapRef.current.fitBounds([
-                    [feature.extent.xmin, feature.extent.ymin],
-                    [feature.extent.xmax, feature.extent.ymax],
+                    [xmin, ymin],
+                    [xmax, ymax],
                 ], {
                     padding: 20
                 });
@@ -134,6 +137,14 @@ const MapComponent = () => {
             alert('Error fetching cadastral data');
         }
     };
+
+// Conversion function
+    function convertEPSG3857ToWGS84(x, y) {
+        const lon = (x / 20037508.34) * 180;
+        let lat = (y / 20037508.34) * 180;
+        lat = (180 / Math.PI) * (2 * Math.atan(Math.exp((lat * Math.PI) / 180)) - Math.PI / 2);
+        return [lon, lat];
+    }
 
     // Toggle card visibility on mobile
     const toggleCardVisibility = () => {
