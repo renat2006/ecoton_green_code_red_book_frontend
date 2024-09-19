@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { FaTelegramPlane } from 'react-icons/fa';
+import {AuthContext} from "../Providers/AuthContext.jsx";
+
 
 const LoginPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [userData, setUserData] = useState(null);
     const [apiResponse, setApiResponse] = useState(null);
+    const { user, login } = useContext(AuthContext); // Достаем функцию login и user из контекста
 
     useEffect(() => {
         // Проверка наличия данных в URL
@@ -29,18 +31,6 @@ const LoginPage = () => {
             return;
         }
 
-        // Приведение типов для соответствия требованиям бэка
-        setUserData(user);
-        console.log(user);
-        console.log(JSON.stringify({
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name || "",
-            username: user.username || "",
-
-            auth_date: parseInt(user.auth_date, 10),
-            hash: user.hash
-        }))
         try {
             const response = await fetch('https://api.zero-kilometer.ru/auth', {
                 method: 'POST',
@@ -63,7 +53,10 @@ const LoginPage = () => {
             }
 
             const tokens = await response.json();
-            console.log(tokens)
+            console.log(tokens);
+
+            // Сохраняем данные пользователя и токен в контекст и localStorage
+            login(user, tokens.token);
             setApiResponse(tokens);
             setIsModalVisible(true);
         } catch (error) {
@@ -73,13 +66,13 @@ const LoginPage = () => {
 
     const closeModal = () => {
         setIsModalVisible(false);
-        setUserData(null);
         setApiResponse(null);
     };
 
     return (
         <div className="relative min-h-screen bg-cover bg-center"
              style={{backgroundImage: "url('/img/map_back.webp')"}}>
+
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
@@ -93,13 +86,17 @@ const LoginPage = () => {
                     </div>
 
                     {/* Custom Telegram Login Button */}
-                    <button
-                        onClick={handleTelegramLogin}
-                        className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl"
-                    >
-                        <FaTelegramPlane className="text-xl"/>
-                        <span>Войти через Telegram</span>
-                    </button>
+                    {!user ? (
+                        <button
+                            onClick={handleTelegramLogin}
+                            className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl"
+                        >
+                            <FaTelegramPlane className="text-xl"/>
+                            <span>Войти через Telegram</span>
+                        </button>
+                    ) : (
+                        <p>Добро пожаловать, {user.first_name}!</p>
+                    )}
                 </div>
             </div>
 
@@ -108,12 +105,12 @@ const LoginPage = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 className="text-2xl font-bold mb-4">User Information</h3>
-                        {userData ? (
+                        {user ? (
                             <div>
-                                <p><strong>ID:</strong> {userData.id}</p>
-                                <p><strong>First Name:</strong> {userData.first_name}</p>
-                                <p><strong>Last Name:</strong> {userData.last_name}</p>
-                                {userData.username && <p><strong>Username:</strong> @{userData.username}</p>}
+                                <p><strong>ID:</strong> {user.id}</p>
+                                <p><strong>First Name:</strong> {user.first_name}</p>
+                                <p><strong>Last Name:</strong> {user.last_name}</p>
+                                {user.username && <p><strong>Username:</strong> @{user.username}</p>}
                             </div>
                         ) : (
                             <p>No user data available</p>
