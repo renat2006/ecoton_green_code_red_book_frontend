@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {FaTelegramPlane} from 'react-icons/fa';
-import {us} from "@mapbox/mapbox-gl-geocoder/lib/exceptions.js";
+import React, { useEffect, useState } from 'react';
+import { FaTelegramPlane } from 'react-icons/fa';
 
 const LoginPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -24,8 +23,24 @@ const LoginPage = () => {
     };
 
     const onTelegramAuth = async (user) => {
+        // Проверка обязательных полей
+        if (!user.id || !user.first_name || !user.auth_date || !user.hash) {
+            console.error('Missing required fields');
+            return;
+        }
+
+        // Приведение типов для соответствия требованиям бэка
         setUserData(user);
-        console.log(user)
+        console.log(user);
+        console.log(JSON.stringify({
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name || "",
+            username: user.username || "",
+            photo_url: user.photo_url || "",
+            auth_date: parseInt(user.auth_date, 10),
+            hash: user.hash
+        }))
         try {
             const response = await fetch('https://api.zero-kilometer.ru/auth', {
                 method: 'POST',
@@ -35,10 +50,10 @@ const LoginPage = () => {
                 body: JSON.stringify({
                     id: user.id,
                     first_name: user.first_name,
-                    last_name: user.last_name,
-                    username: user.username,
-                    photo_url: user?.photo_url && user?.photo_url ? user.photo_url : "",
-                    auth_date: user.auth_date,
+                    last_name: user.last_name || "",
+                    username: user.username || "",
+                    photo_url: user.photo_url || "",
+                    auth_date: parseInt(user.auth_date, 10),
                     hash: user.hash
                 }),
             });
