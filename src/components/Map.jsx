@@ -1,12 +1,12 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useRef, useState } from 'react';
-import { Card, Button, Checkbox, Collapse, Input } from 'antd';
-import { CheckCircleOutlined, CloseOutlined, FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import React, {useEffect, useRef, useState} from 'react';
+import {Card, Button, Checkbox, Collapse, Input} from 'antd';
+import {CheckCircleOutlined, CloseOutlined, FilterOutlined, SearchOutlined} from "@ant-design/icons";
 import polygonData from '../store/polygon_data.json';
 
-const { Panel } = Collapse;
+const {Panel} = Collapse;
 
 const MapComponent = () => {
     const mapContainerRef = useRef(null);
@@ -75,7 +75,7 @@ const MapComponent = () => {
 
             const data = await response.json();
             const feature = data.feature;
-
+            console.log(data)
             if (feature && feature.extent) {
                 // Convert the coordinates from EPSG:3857 to WGS84
                 const [xmin, ymin] = convertEPSG3857ToWGS84(feature.extent.xmin, feature.extent.ymin);
@@ -123,6 +123,7 @@ const MapComponent = () => {
                 }
 
                 // Center the map on the found feature
+                console.log()
                 mapRef.current.fitBounds([
                     [xmin, ymin],
                     [xmax, ymax],
@@ -161,7 +162,8 @@ const MapComponent = () => {
             {/* Toggle Button for Mobile */}
             <div className="absolute top-4 left-4 z-20 md:hidden">
                 {!isCardVisible && (
-                    <Button onClick={toggleCardVisibility} type="primary" shape="circle" icon={<FilterOutlined />}></Button>
+                    <Button onClick={toggleCardVisibility} type="primary" shape="circle"
+                            icon={<FilterOutlined/>}></Button>
                 )}
             </div>
 
@@ -173,13 +175,14 @@ const MapComponent = () => {
             >
                 <Card
                     title="Фильтр"
-                    extra={isCardVisible ? <Button onClick={toggleCardVisibility} type="text" icon={<CloseOutlined/>}></Button> : <></>}
+                    extra={isCardVisible ?
+                        <Button onClick={toggleCardVisibility} type="text" icon={<CloseOutlined/>}></Button> : <></>}
                     className="h-full overflow-auto"
                 >
                     <Collapse>
                         <Panel header="Зоны парков" key="1">
                             <Checkbox.Group
-                                style={{ display: 'flex', flexDirection: 'column' }}
+                                style={{display: 'flex', flexDirection: 'column'}}
                                 onChange={handleCheckboxChange}
                                 value={selectedPolygons}
                             >
@@ -199,7 +202,7 @@ const MapComponent = () => {
                             value={cadastralNumber}
                             onChange={(e) => setCadastralNumber(e.target.value)}
                             onPressEnter={searchByCadastralNumber}
-                            suffix={<SearchOutlined />}
+                            suffix={<SearchOutlined/>}
                         />
                         <Button
                             type="primary"
