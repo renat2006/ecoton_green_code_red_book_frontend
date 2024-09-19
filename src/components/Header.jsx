@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Layout, Menu, Button, Drawer, Grid, Avatar, Dropdown } from 'antd';
 import { UserOutlined, MenuOutlined } from '@ant-design/icons';
-import {AuthContext} from "../Providers/AuthContext.jsx";
-
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { AuthContext } from "../Providers/AuthContext.jsx";
 
 const { Header } = Layout;
 const { useBreakpoint } = Grid;
@@ -10,8 +10,9 @@ const { useBreakpoint } = Grid;
 const AppHeader = () => {
     const [drawerVisible, setDrawerVisible] = React.useState(false);
     const screens = useBreakpoint();
+    const navigate = useNavigate(); // Initialize useNavigate
 
-    // Получаем данные пользователя и функцию logout из контекста
+    // Get user data and logout function from context
     const { user, logout } = useContext(AuthContext);
 
     const showDrawer = () => {
@@ -24,6 +25,14 @@ const AppHeader = () => {
 
     const handleLogout = () => {
         logout();
+    };
+
+    const handleLogoClick = () => {
+        navigate('/home'); // Navigate to home
+    };
+
+    const handleLoginRedirect = () => {
+        navigate('/login'); // Navigate to login
     };
 
     const userMenu = (
@@ -48,23 +57,21 @@ const AppHeader = () => {
     return (
         <Header className="bg-primary-700 shadow-md fixed w-full z-50 top-0 ">
             <div className="flex justify-between items-center h-full px-6">
-
-                <div className="text-2xl text-white font-jost">
+                <div className="text-2xl text-white font-jost cursor-pointer" onClick={handleLogoClick}>
                     EcoApp
                 </div>
 
                 {screens.md ? (
                     <>
                         <div className="flex gap-5">
-                            <Button className="bg-transparent text-white rounded-sm">Карта</Button>
+                            <Button className="bg-transparent text-white rounded-sm" onClick={handleLogoClick}>
+                                Карта
+                            </Button>
                             <Button className="bg-transparent text-white rounded-sm">Библиотека</Button>
                         </div>
                         <div className="flex items-center gap-5">
                             {!user ? (
-                                <>
-                                    <Button className="rounded-sm">Вход</Button>
-
-                                </>
+                                <Button className="rounded-sm" onClick={handleLoginRedirect}>Вход</Button>
                             ) : (
                                 <Dropdown overlay={userMenu} placement="bottomRight">
                                     <Avatar
@@ -93,18 +100,12 @@ const AppHeader = () => {
                             bodyStyle={{ padding: 0 }}
                         >
                             <Menu mode="vertical">
-                                <Menu.Item key="1">Домой</Menu.Item>
-
+                                <Menu.Item key="1" onClick={handleLogoClick}>Домой</Menu.Item>
                                 <Menu.Divider />
                                 {user ? (
-                                    <>
-                                        <Menu.Item key="4" onClick={handleLogout}>Выйти</Menu.Item>
-                                    </>
+                                    <Menu.Item key="2" onClick={handleLogout}>Выйти</Menu.Item>
                                 ) : (
-                                    <>
-                                        <Menu.Item key="5">Войти</Menu.Item>
-
-                                    </>
+                                    <Menu.Item key="3" onClick={handleLoginRedirect}>Войти</Menu.Item>
                                 )}
                             </Menu>
                         </Drawer>
