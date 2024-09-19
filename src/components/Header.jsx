@@ -34,7 +34,7 @@ const AppHeader = () => {
                         <strong>ID:</strong> {user.id}
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <strong>Username:</strong> {user.username}
+                        <strong>Имя:</strong> {user.username}
                     </Menu.Item>
                     <Menu.Divider />
                 </>
@@ -62,8 +62,8 @@ const AppHeader = () => {
                         <div className="flex items-center gap-5">
                             {!user ? (
                                 <>
-                                    <Button className="rounded-sm">Регистрация</Button>
-                                    <Button className="bg-transparent text-white rounded-sm">Вход</Button>
+                                    <Button className="rounded-sm">Вход</Button>
+
                                 </>
                             ) : (
                                 <Dropdown overlay={userMenu} placement="bottomRight">
@@ -93,9 +93,8 @@ const AppHeader = () => {
                             bodyStyle={{ padding: 0 }}
                         >
                             <Menu mode="vertical">
-                                <Menu.Item key="1">Home</Menu.Item>
-                                <Menu.Item key="2">About</Menu.Item>
-                                <Menu.Item key="3">Contact</Menu.Item>
+                                <Menu.Item key="1">Домой</Menu.Item>
+
                                 <Menu.Divider />
                                 {user ? (
                                     <>
@@ -103,8 +102,8 @@ const AppHeader = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <Menu.Item key="5">Login</Menu.Item>
-                                        <Menu.Item key="6">Signup</Menu.Item>
+                                        <Menu.Item key="5">Войти</Menu.Item>
+
                                     </>
                                 )}
                             </Menu>
