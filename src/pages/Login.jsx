@@ -1,13 +1,27 @@
-import React from 'react';
-import { FaTelegramPlane } from 'react-icons/fa'
+import React, { useState } from 'react';
+import { FaTelegramPlane } from 'react-icons/fa';
 
 const LoginPage = () => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [userData, setUserData] = useState(null);
+
     const handleTelegramLogin = () => {
         // Replace with your actual bot_id
         const telegramBotId = '8133898169';
         window.location.href = `https://oauth.telegram.org/auth?bot_id=${telegramBotId}&origin=${window.location.origin}&embed=1&request_access=write`;
     };
 
+    // Simulate receiving user data (for example purposes)
+    const onTelegramAuth = (user) => {
+        setUserData(user);
+        setIsModalVisible(true);
+    };
+
+    // Close the modal
+    const closeModal = () => {
+        setIsModalVisible(false);
+        setUserData(null);
+    };
 
     return (
         <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/map_back.webp')" }}>
@@ -32,6 +46,31 @@ const LoginPage = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Modal */}
+            {isModalVisible && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h3 className="text-2xl font-bold mb-4">User Information</h3>
+                        {userData ? (
+                            <div>
+                                <p><strong>ID:</strong> {userData.id}</p>
+                                <p><strong>First Name:</strong> {userData.first_name}</p>
+                                <p><strong>Last Name:</strong> {userData.last_name}</p>
+                                {userData.username && <p><strong>Username:</strong> @{userData.username}</p>}
+                            </div>
+                        ) : (
+                            <p>No user data available</p>
+                        )}
+                        <button
+                            onClick={closeModal}
+                            className="mt-4 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
