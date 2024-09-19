@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaTelegramPlane } from 'react-icons/fa';
+import {us} from "@mapbox/mapbox-gl-geocoder/lib/exceptions.js";
 
 const LoginPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -24,6 +25,7 @@ const LoginPage = () => {
 
     const onTelegramAuth = async (user) => {
         setUserData(user);
+        console.log(user)
         try {
             const response = await fetch('https://api.zero-kilometer.ru/auth', {
                 method: 'POST',
