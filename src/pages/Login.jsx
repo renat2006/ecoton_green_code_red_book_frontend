@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaTelegramPlane } from 'react-icons/fa';
 
 const LoginPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [userData, setUserData] = useState(null);
+    const [apiResponse, setApiResponse] = useState(null);
+
+    useEffect(() => {
+        // Проверка наличия данных в URL
+        if (window.location.hash.includes('tgAuthResult')) {
+            const hashData = window.location.hash.split('=')[1];
+            const decodedData = decodeURIComponent(atob(hashData));
+            const user = JSON.parse(decodedData);
+
+            onTelegramAuth(user);
+        }
+    }, []);
 
     const handleTelegramLogin = () => {
         const telegramBotId = '8133898169';
@@ -13,7 +25,7 @@ const LoginPage = () => {
     const onTelegramAuth = async (user) => {
         setUserData(user);
         try {
-            const response = await fetch('/auth', {
+            const response = await fetch('https://api.zero-kilometer.ru/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -23,8 +35,8 @@ const LoginPage = () => {
                     first_name: user.first_name,
                     last_name: user.last_name,
                     username: user.username,
-                    photo_url:user.photo_url,
-                    auth_date:user.auth_date,
+                    photo_url: user.photo_url,
+                    auth_date: user.auth_date,
                 }),
             });
 
@@ -33,19 +45,17 @@ const LoginPage = () => {
             }
 
             const tokens = await response.json();
-            console.log(tokens)
-            alert("ok")
-            alert(tokens)
-            // Use tokens (e.g., save them in local storage)
+            setApiResponse(tokens);
+            setIsModalVisible(true);
         } catch (error) {
             console.error('Error:', error);
         }
-        setIsModalVisible(true);
     };
 
     const closeModal = () => {
         setIsModalVisible(false);
         setUserData(null);
+        setApiResponse(null);
     };
 
     return (
@@ -88,6 +98,13 @@ const LoginPage = () => {
                             </div>
                         ) : (
                             <p>No user data available</p>
+                        )}
+                        {/* Display API response */}
+                        {apiResponse && (
+                            <div className="mt-4">
+                                <h4 className="font-bold">API Response:</h4>
+                                <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+                            </div>
                         )}
                         <button
                             onClick={closeModal}
