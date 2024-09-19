@@ -60,10 +60,10 @@ const LoginPage = () => {
 
             // Save user data and token in context and localStorage
             login(user, tokens.token);
+            console.log(user, tokens)
             setApiResponse(tokens);
 
-            // Redirect to home page
-            navigate('/home');
+
 
         } catch (error) {
             console.error('Error:', error);
