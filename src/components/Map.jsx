@@ -194,18 +194,21 @@ const MapComponent = () => {
                             </Checkbox.Group>
                         </Panel>
                         <Panel header="Кадастровый поиск" key="2">
-                            <div className="mt-4 flex gap-5">
+                            <div className="mt-4 flex gap-3 items-center">
                                 <Input
+                                    className="h-10"
                                     placeholder="Введите кадастровый номер"
                                     value={cadastralNumber}
                                     onChange={(e) => setCadastralNumber(e.target.value)}
                                     onPressEnter={searchByCadastralNumber}
                                     suffix={<SearchOutlined/>}
+
                                 />
                                 <Button
+                                    className="h-10"
                                     type="primary"
                                     onClick={searchByCadastralNumber}
-                                    className="mt-2"
+
                                 >
                                     Найти
                                 </Button>
