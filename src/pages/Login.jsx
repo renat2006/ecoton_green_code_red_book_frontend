@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaTelegramPlane } from 'react-icons/fa';
-import {AuthContext} from "../Providers/AuthContext.jsx";
-
+import { AuthContext } from "../Providers/AuthContext.jsx";
 
 const LoginPage = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
     const [apiResponse, setApiResponse] = useState(null);
-    const { user, login } = useContext(AuthContext); // Достаем функцию login и user из контекста
+    const { user, login } = useContext(AuthContext);
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
-        // Проверка наличия данных в URL
+        // Check for user data in URL
         if (window.location.hash.includes('tgAuthResult')) {
             const hashData = window.location.hash.split('=')[1];
             const decodedData = decodeURIComponent(atob(hashData));
@@ -25,7 +25,7 @@ const LoginPage = () => {
     };
 
     const onTelegramAuth = async (user) => {
-        // Проверка обязательных полей
+        // Validate necessary fields
         if (!user.id || !user.first_name || !user.auth_date || !user.hash) {
             console.error('Missing required fields');
             return;
@@ -55,31 +55,26 @@ const LoginPage = () => {
             const tokens = await response.json();
             console.log(tokens);
 
-            // Сохраняем данные пользователя и токен в контекст и localStorage
+            // Save user data and token in context and localStorage
             login(user, tokens.token);
             setApiResponse(tokens);
+
+            // Redirect to home page
+            navigate('/home');
 
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    const closeModal = () => {
-        setIsModalVisible(false);
-        setApiResponse(null);
-    };
-
     return (
-        <div className="relative min-h-screen bg-cover bg-center"
-             style={{backgroundImage: "url('/img/map_back.webp')"}}>
-
+        <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/map_back.webp')" }}>
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
             {/* Login Card */}
             <div className="relative z-10 flex items-center justify-center min-h-screen">
-                <div
-                    className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105">
+                <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105">
                     <div className="text-center mb-8">
                         <h2 className="text-3xl font-extrabold text-gray-800">Добро пожаловать</h2>
                         <p className="text-gray-600">Войдите через Telegram, чтобы продолжить</p>
@@ -99,38 +94,6 @@ const LoginPage = () => {
                     )}
                 </div>
             </div>
-
-            {/* Modal */}
-            {isModalVisible && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h3 className="text-2xl font-bold mb-4">User Information</h3>
-                        {user ? (
-                            <div>
-                                <p><strong>ID:</strong> {user.id}</p>
-                                <p><strong>First Name:</strong> {user.first_name}</p>
-                                <p><strong>Last Name:</strong> {user.last_name}</p>
-                                {user.username && <p><strong>Username:</strong> @{user.username}</p>}
-                            </div>
-                        ) : (
-                            <p>No user data available</p>
-                        )}
-                        {/* Display API response */}
-                        {apiResponse && (
-                            <div className="mt-4">
-                                <h4 className="font-bold">API Response:</h4>
-                                <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-                            </div>
-                        )}
-                        <button
-                            onClick={closeModal}
-                            className="mt-4 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
