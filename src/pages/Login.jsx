@@ -34,6 +34,8 @@ const LoginPage = () => {
 
             const tokens = await response.json();
             console.log(tokens)
+            alert("ok")
+            alert(tokens)
             // Use tokens (e.g., save them in local storage)
         } catch (error) {
             console.error('Error:', error);
