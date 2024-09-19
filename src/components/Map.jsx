@@ -1,20 +1,21 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import mapboxgl from 'mapbox-gl';
-import React, {useEffect, useRef, useState} from 'react';
-import {Card, Button, Checkbox, Collapse, Input} from 'antd';
-import {CheckCircleOutlined, CloseOutlined, FilterOutlined, SearchOutlined} from "@ant-design/icons";
+import React, { useEffect, useRef, useState } from 'react';
+import { Card, Button, Checkbox, Collapse, Input } from 'antd';
+import { CloseOutlined, FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import polygonData from '../store/polygon_data.json';
+import animalData from '../store/animal_data.json';
 
-const {Panel} = Collapse;
+const { Panel } = Collapse;
 
 const MapComponent = () => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const [selectedPolygons, setSelectedPolygons] = useState(polygonData.features.map(feature => feature.id));
-    const [isCardVisible, setIsCardVisible] = useState(false); // State to control card visibility on mobile
-    const [cadastralNumber, setCadastralNumber] = useState(''); // State for cadastral number
-    const [highlightedFeature, setHighlightedFeature] = useState(null); // State to store the highlighted feature
+    const [isCardVisible, setIsCardVisible] = useState(false);
+    const [cadastralNumber, setCadastralNumber] = useState('');
+    const [highlightedFeature, setHighlightedFeature] = useState(null);
 
     useEffect(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -46,9 +47,26 @@ const MapComponent = () => {
                         'fill-opacity': 0.5,
                     }
                 });
+
+                // Add animal markers to the map
+                addAnimalMarkers();
             });
         }
     }, []);
+
+    // Function to add animal markers to the map
+    const addAnimalMarkers = () => {
+        animalData.parks.forEach(park => {
+            park.animals.forEach(animal => {
+                const { coordinates } = animal.location;
+                const marker = new mapboxgl.Marker()
+                    .setLngLat(coordinates)
+                    .setPopup(new mapboxgl.Popup({ offset: 25 })
+                        .setHTML(`<h3>${animal.name}</h3><img src="${animal.image}" alt="${animal.name}" style="width: 50px; height: auto;" /><p>${animal.description}</p>`))
+                    .addTo(mapRef.current);
+            });
+        });
+    };
 
     // Function to update the displayed polygons based on the filter
     const updatePolygons = () => {
@@ -75,7 +93,6 @@ const MapComponent = () => {
 
             const data = await response.json();
             const feature = data.feature;
-            console.log(data)
             if (feature && feature.extent) {
                 // Convert the coordinates from EPSG:3857 to WGS84
                 const [xmin, ymin] = convertEPSG3857ToWGS84(feature.extent.xmin, feature.extent.ymin);
@@ -123,7 +140,6 @@ const MapComponent = () => {
                 }
 
                 // Center the map on the found feature
-                console.log()
                 mapRef.current.fitBounds([
                     [xmin, ymin],
                     [xmax, ymax],
@@ -139,7 +155,7 @@ const MapComponent = () => {
         }
     };
 
-// Conversion function
+    // Conversion function
     function convertEPSG3857ToWGS84(x, y) {
         const lon = (x / 20037508.34) * 180;
         let lat = (y / 20037508.34) * 180;
@@ -202,21 +218,17 @@ const MapComponent = () => {
                                     onChange={(e) => setCadastralNumber(e.target.value)}
                                     onPressEnter={searchByCadastralNumber}
                                     suffix={<SearchOutlined/>}
-
                                 />
                                 <Button
                                     className="h-10"
                                     type="primary"
                                     onClick={searchByCadastralNumber}
-
                                 >
                                     Найти
                                 </Button>
                             </div>
                         </Panel>
                     </Collapse>
-
-
                 </Card>
             </div>
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Tabs, Input, Select, List, Button, Dropdown, Menu, Collapse } from 'antd';
-import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
+import { Tabs, Select, List, Button, Dropdown, Menu, Collapse } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import animalData from '../store/animal_data.json';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -10,11 +12,8 @@ const LibraryPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('животные');
     const [filter, setFilter] = useState('');
 
-    // Sample data for the list
-    const data = Array(5).fill({
-        title: 'Животное',
-        description: 'что-то про животное',
-    });
+    // Extract animal data
+    const data = animalData.parks.flatMap(park => park.animals);
 
     // Handle tab change
     const handleTabChange = (key) => {
@@ -37,34 +36,31 @@ const LibraryPage = () => {
                     {/* Plants content */}
                 </TabPane>
                 <TabPane tab="Животные" key="животные">
-                    <div className="flex flex-col md:flex-row justify-between mb-5 ">
-
-                                <Collapse >
-                                    <Panel header="Искать по классам" key="1">
-                                        <div className="flex flex-col space-y-2">
-
-                                            <Select
-                                                placeholder="Выберите класс"
-                                                onChange={(value) => setFilter(value)}
-                                            >
-                                                <Option value="class1">Класс 1</Option>
-                                                <Option value="class2">Класс 2</Option>
-                                            </Select>
-                                        </div>
-                                    </Panel>
-                                    <Panel header="Искать по отрядам" key="2">
-                                        <Button type="default">Искать по отрядам</Button>
-                                    </Panel>
-                                    <Panel header="Искать по семействам" key="3">
-                                        <Button type="default">Искать по семействам</Button>
-                                    </Panel>
-                                    <Panel header="Искать по родам" key="4">
-                                        <Button type="default">Искать по родам</Button>
-                                    </Panel>
-                                    <Panel header="Искать по видам" key="5">
-                                        <Button type="default">Искать по видам</Button>
-                                    </Panel>
-
+                    <div className="flex flex-col md:flex-row justify-between mb-5">
+                        <Collapse>
+                            <Panel header="Искать по классам" key="1">
+                                <div className="flex flex-col space-y-2">
+                                    <Select
+                                        placeholder="Выберите класс"
+                                        onChange={(value) => setFilter(value)}
+                                    >
+                                        <Option value="class1">Класс 1</Option>
+                                        <Option value="class2">Класс 2</Option>
+                                    </Select>
+                                </div>
+                            </Panel>
+                            <Panel header="Искать по отрядам" key="2">
+                                <Button type="default">Искать по отрядам</Button>
+                            </Panel>
+                            <Panel header="Искать по семействам" key="3">
+                                <Button type="default">Искать по семействам</Button>
+                            </Panel>
+                            <Panel header="Искать по родам" key="4">
+                                <Button type="default">Искать по родам</Button>
+                            </Panel>
+                            <Panel header="Искать по видам" key="5">
+                                <Button type="default">Искать по видам</Button>
+                            </Panel>
                         </Collapse>
                         <div className="flex-1 md:ml-5">
                             <List
@@ -81,8 +77,11 @@ const LibraryPage = () => {
                                         ]}
                                     >
                                         <List.Item.Meta
-                                            avatar={<img src="https://via.placeholder.com/50" alt="avatar" />}
-                                            title={<a href="https://example.com">{item.title}</a>}
+                                            avatar={<img src={item.image} alt={item.name} style={{ width: '50px' }} />}
+                                            title={<Link to={{
+                                                pathname: `/animal-detail/${item.uuid}`,
+                                                state: { animal: item }
+                                            }}>{item.name}</Link>}
                                             description={item.description}
                                         />
                                     </List.Item>

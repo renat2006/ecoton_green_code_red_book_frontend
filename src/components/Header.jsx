@@ -3,6 +3,7 @@ import { Layout, Menu, Button, Drawer, Grid, Avatar, Dropdown } from 'antd';
 import { UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { AuthContext } from "../Providers/AuthContext.jsx";
+import library from "../pages/Library.jsx";
 
 const { Header } = Layout;
 const { useBreakpoint } = Grid;
@@ -30,6 +31,10 @@ const AppHeader = () => {
 
     const handleLogoClick = () => {
         navigate('/'); // Navigate to home
+    };
+
+    const handleLibClick = () => {
+        navigate('/library');
     };
 
     const handleLoginRedirect = () => {
@@ -68,7 +73,7 @@ const AppHeader = () => {
                             <Button className="bg-transparent text-white rounded-sm" onClick={handleLogoClick}>
                                 Карта
                             </Button>
-                            <Button className="bg-transparent text-white rounded-sm">Библиотека</Button>
+                            <Button className="bg-transparent text-white rounded-sm" onClick={handleLibClick}>Библиотека</Button>
                         </div>
                         <div className="flex items-center gap-5">
                             {!user ? (
