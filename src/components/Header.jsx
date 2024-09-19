@@ -29,7 +29,7 @@ const AppHeader = () => {
     };
 
     const handleLogoClick = () => {
-        navigate('/home'); // Navigate to home
+        navigate('/'); // Navigate to home
     };
 
     const handleLoginRedirect = () => {

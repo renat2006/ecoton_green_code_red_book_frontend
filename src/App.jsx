@@ -12,10 +12,10 @@ function App() {
                 <Header />
                 <Routes>
                     <Route path="/login" element={<Login />} />
-                    <Route path="/home" element={<Main />} />
+                    <Route path="/" element={<Main />} />
                     {/*<Route path="/library" element={<Library />} />*/}
                     {/* Redirect from root to /home */}
-                    <Route path="/" element={<Navigate to="/home" replace />} />
+
                 </Routes>
             </div>
         </Router>
