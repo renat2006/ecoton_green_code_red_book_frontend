@@ -74,6 +74,7 @@ const MapComponent = () => {
             if (!response.ok) throw new Error('Failed to fetch cadastral data');
 
             const data = await response.json();
+            console.log(data)
             const feature = data.feature;
 
             if (feature && feature.extent) {
