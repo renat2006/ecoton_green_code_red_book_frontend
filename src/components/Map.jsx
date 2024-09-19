@@ -196,7 +196,7 @@ const MapComponent = () => {
                     </Collapse>
 
                     {/* Search by Cadastral Number */}
-                    <div className="mt-4">
+                    <div className="mt-4 flex gap-5">
                         <Input
                             placeholder="Введите кадастровый номер"
                             value={cadastralNumber}
