@@ -24,7 +24,7 @@ const LoginPage = () => {
 
     const handleTelegramLogin = () => {
         const telegramBotId = '8133898169';
-        window.location.href = `https://oauth.telegram.org/auth?bot_id=${telegramBotId}&origin=${window.location.origin}&embed=1&request_access=write`;
+        window.location.href = `https://oauth.telegram.org/auth?bot_id=${telegramBotId}&origin=${window.location.origin}/login&embed=1&request_access=write`;
     };
 
     const onTelegramAuth = async (user) => {
