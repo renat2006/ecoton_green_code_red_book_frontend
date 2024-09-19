@@ -34,7 +34,7 @@
           "uuid": "animal-002",
           "name": "Черный аист",
           "description": "Черный аист - редкая птица, предпочитающая глухие леса с водоемами.",
-          "image": "black_stork.jpg",
+          "image": "https://smartpress.by/upload/resize_cache/iblock/29a/wtennyf63n1isxrohbbuwgyowtgvcqmb/1200_630_1/CHernyy-aist.jpeg",
           "tags": ["Аист", "Птица", "Красная книга"],
           "location": {
             "coordinates": [37.63, 55.75]
@@ -60,7 +60,7 @@
           "uuid": "animal-003",
           "name": "Орлан-белохвост",
           "description": "Орлан-белохвост - крупный хищник из семейства ястребиных, обитающий у крупных водоемов.",
-          "image": "white_tailed_eagle.jpg",
+          "image": "https://smartpress.by/upload/resize_cache/iblock/29a/wtennyf63n1isxrohbbuwgyowtgvcqmb/1200_630_1/CHernyy-aist.jpeg",
           "tags": ["Орлан", "Хищник", "Красная книга"],
           "location": {
             "coordinates": [37.61, 55.75]
