@@ -14,6 +14,7 @@ const AppHeader = () => {
 
     // Get user data and logout function from context
     const { user, logout } = useContext(AuthContext);
+    console.log(user)
 
     const showDrawer = () => {
         setDrawerVisible(true);

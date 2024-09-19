@@ -13,7 +13,10 @@ const LoginPage = () => {
         if (window.location.hash.includes('tgAuthResult')) {
             const hashData = window.location.hash.split('=')[1];
             const decodedData = decodeURIComponent(atob(hashData));
+            console.log('Decoded Data:', decodedData); // Debug: Check the decoded data
+
             const user = JSON.parse(decodedData);
+            console.log('Parsed User Data:', user); // Debug: Check the parsed user data
 
             onTelegramAuth(user);
         }
@@ -53,7 +56,7 @@ const LoginPage = () => {
             }
 
             const tokens = await response.json();
-            console.log(tokens);
+            console.log('API Tokens:', tokens); // Debug: Check API tokens
 
             // Save user data and token in context and localStorage
             login(user, tokens.token);
